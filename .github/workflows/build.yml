@@ -7,18 +7,35 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    container:
-      image: kivy/buildozer:latest
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Force non-interactive mode
-        run: |
-          export BUILDOZER_ALWAYS_YES=1
-          export PIP_NO_INPUT=1
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.10
 
-      - name: Build APK (auto-accept root)
+      - name: Install dependencies
         run: |
-          yes | buildozer android debug
+          sudo apt update
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip
+          pip install --upgrade pip
+          pip install buildozer cython
+
+      - name: Fix Android SDK licenses (IMPORTANT)
+        run: |
+          mkdir -p $HOME/.android
+          touch $HOME/.android/repositories.cfg
+          yes | sdkmanager --licenses || true
+
+      - name: Install Buildozer Android requirements
+        run: |
+          buildozer android clean || true
+          buildozer android debug --verbose
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk
+          path: bin/*.apk
