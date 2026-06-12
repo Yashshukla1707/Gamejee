@@ -8,15 +8,15 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
 
-      - name: Install system dependencies
+      - name: Install system deps
         run: |
           sudo apt update
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip
@@ -26,17 +26,29 @@ jobs:
           pip install --upgrade pip
           pip install cython==0.29.36 buildozer==1.5.0
 
-      - name: Force stable python-for-android version
+      - name: Fix Android SDK licenses + tools
         run: |
-          pip install python-for-android==2023.9.16
+          mkdir -p $HOME/android-sdk
+          export ANDROID_SDK_ROOT=$HOME/android-sdk
 
-      - name: Clean old builds
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+          unzip -q commandlinetools-linux-9477386_latest.zip
+          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
+          mv cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest
+
+          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT --licenses
+
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT \
+            "platform-tools" \
+            "platforms;android-33" \
+            "build-tools;33.0.2"
+
+      - name: Force Buildozer env
         run: |
-          rm -rf .buildozer
-          rm -rf ~/.buildozer
+          export ANDROID_SDK_ROOT=$HOME/android-sdk
+          export ANDROID_HOME=$ANDROID_SDK_ROOT
+          export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
 
       - name: Build APK
         run: |
-          export P4A_NDK_VERSION=25b
-          export P4A_BUILD_DIR=$HOME/.local/share/python-for-android
           buildozer -v android debug
