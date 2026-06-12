@@ -13,17 +13,16 @@ requirements = python3,kivy
 orientation = portrait
 fullscreen = 0
 
-# Android stable config (THIS IS IMPORTANT)
 android.api = 33
 android.minapi = 21
+
+# VERY IMPORTANT FIX
 android.ndk = 27b
 
-# DO NOT FORCE BUILD TOOLS (THIS WAS YOUR MAIN ERROR)
-# android.build_tools = 37.0.0   <-- REMOVE IF YOU SEE IT
+# DO NOT FORCE ANY BUILD TOOLS
+# android.build_tools = MUST NOT EXIST ANYWHERE
 
 android.archs = arm64-v8a, armeabi-v7a
-
-# prevents auto-breaking updates
 android.skip_update = True
 
 log_level = 2
