@@ -1,5 +1,9 @@
 [app]
 
+android.api = 33
+android.minapi = 21
+android.ndk = 25b
+android.skip_update = True
 title = Gamejee
 
 package.name = gamejee
