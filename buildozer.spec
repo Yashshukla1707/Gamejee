@@ -17,4 +17,7 @@ android.api = 34
 android.minapi = 21
 android.archs = arm64-v8a
 
-log_level = 2
+# 🔥 CRITICAL FIX (forces stable SDK tools)
+android.sdk = 34
+android.ndk = 25b
+android.accept_sdk_license = True
