@@ -16,34 +16,31 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install dependencies
+      - name: Install system dependencies
         run: |
           sudo apt update
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip
           pip install --upgrade pip
           pip install buildozer cython
 
-      # THIS IS THE IMPORTANT FIX (NO LICENSE STUCK ANYMORE)
-      - name: Pre-accept Android SDK licenses
+      # FIX: prevent SDK license freeze
+      - name: Setup Android environment
         run: |
           mkdir -p $HOME/.android
           touch $HOME/.android/repositories.cfg
-          yes | sdkmanager --licenses || true
 
-      #  extra safety (prevents prompt freeze)
-      - name: Force yes for buildozer
-        run: |
-          export BUILDOZER_ALWAYS_YES=1
-
+      # BUILD (NO yes | NO sdkmanager hacks)
       - name: Build APK
         run: |
-          yes | buildozer -v android debug
+          buildozer -v android debug
 
-      - name: Show output
+      # Show output
+      - name: Check APK output
         run: |
           ls -R bin || true
 
-      - name: Upload APK
+      # IMPORTANT: upload APK
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: Gamejee-APK
