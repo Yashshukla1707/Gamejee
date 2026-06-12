@@ -14,30 +14,20 @@ requirements = python3,kivy
 orientation = portrait
 fullscreen = 0
 
-# ----------------------------
-# ANDROID STABLE CONFIG
-# ----------------------------
-
+# 🔥 FORCE STABLE ANDROID STACK
 android.api = 33
 android.minapi = 21
-
-# VERY IMPORTANT (prevents broken NDK installs)
 android.ndk = 25b
-
-# FORCE stable architecture
 android.arch = arm64-v8a
 
-# FIX: prevents Android 36/37 chaos
+# 🔥 CRITICAL: STOP ANDROID 36/37 BUILD TOOLS
 android.sdk_build_tools = 33.0.2
 
-# STOP auto-updating broken SDK
 android.skip_update = True
-
-# AUTO ACCEPT LICENSES (FIXES YOUR PROMPT ERROR)
 android.accept_sdk_license = True
 
-# ICON (safe - remove if file missing)
-icon.filename = icon.png
+# REMOVE THIS IF FILE MISSING
+# icon.filename = icon.png
 
-# DEBUG (helps if future error happens)
 log_level = 2
+warn_on_root = 1
