@@ -1,4 +1,4 @@
-name: Build APK
+name: Build APK (Buildozer Fixed)
 
 on:
   workflow_dispatch:
@@ -8,51 +8,60 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
+      # 1. Checkout project
       - name: Checkout
         uses: actions/checkout@v4
 
+      # 2. Python setup
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
-      - name: Install system dependencies
+      # 3. System dependencies
+      - name: Install system packages
         run: |
           sudo apt update
-          sudo apt install -y git zip unzip openjdk-17-jdk wget curl
+          sudo apt install -y \
+            git zip unzip openjdk-17-jdk \
+            python3-pip wget curl \
+            build-essential
 
+      # 4. Install Python tools
       - name: Install Buildozer
         run: |
           pip install --upgrade pip
           pip install buildozer cython
 
-      # 🔥 STEP 1: Install Android SDK properly (THIS FIXES sdkmanager issue)
-      - name: Install Android SDK (fixed)
+      # 5. Setup Android SDK (STABLE METHOD - NO sdkmanager chaos)
+      - name: Setup Android SDK
         run: |
-          mkdir -p $HOME/android-sdk
           export ANDROID_SDK_ROOT=$HOME/android-sdk
+          mkdir -p $ANDROID_SDK_ROOT
 
-          cd $HOME/android-sdk
+          cd $ANDROID_SDK_ROOT
 
-          # download command line tools (THIS IS WHAT YOU WERE MISSING)
-          wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
-          unzip commandlinetools-linux-*.zip
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+          unzip -q commandlinetools-linux-*.zip
 
           mkdir -p cmdline-tools/latest
-          mv cmdline-tools/* cmdline-tools/latest/
+          mv cmdline-tools/* cmdline-tools/latest/ 2>/dev/null || true
 
           export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH
 
           yes | sdkmanager --licenses || true
 
-          sdkmanager "platform-tools" \
-                     "platforms;android-34" \
-                     "build-tools;34.0.0"
+          sdkmanager \
+            "platform-tools" \
+            "platforms;android-34" \
+            "build-tools;34.0.0"
 
-      - name: Build APK
+      # 6. Build APK
+      - name: Build APK with Buildozer
         run: |
-          buildozer android debug
+          buildozer -v android debug
 
+      # 7. Upload APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
