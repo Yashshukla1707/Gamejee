@@ -19,37 +19,19 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt update
-          sudo apt install -y git zip unzip wget openjdk-17-jdk python3-pip
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip
 
       - name: Install Buildozer
         run: |
           pip install --upgrade pip
           pip install buildozer cython
 
-      - name: Setup Android SDK
+      - name: Clean old build
         run: |
-          export ANDROID_SDK_ROOT=$HOME/android-sdk
-          mkdir -p $ANDROID_SDK_ROOT
+          rm -rf .buildozer
+          rm -rf ~/.buildozer
 
-          cd $HOME
-          wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
-
-          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
-          unzip -q commandlinetools-linux-9477386_latest.zip -d $ANDROID_SDK_ROOT/cmdline-tools
-
-          mv $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest
-
-          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT \
-            "platform-tools" \
-            "platforms;android-33" \
-            "build-tools;33.0.2"
-
-      - name: Accept Android licenses
+      - name: Build APK (Buildozer only)
         run: |
-          export ANDROID_SDK_ROOT=$HOME/android-sdk
-          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses || true
-
-      - name: Build APK
-        run: |
-          export ANDROID_SDK_ROOT=$HOME/android-sdk
+          buildozer android clean
           buildozer -v android debug
