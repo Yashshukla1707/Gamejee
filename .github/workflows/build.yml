@@ -14,6 +14,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Build APK
+      - name: Force non-interactive mode
         run: |
-          buildozer android debug
+          export BUILDOZER_ALWAYS_YES=1
+          export PIP_NO_INPUT=1
+
+      - name: Build APK (auto-accept root)
+        run: |
+          yes | buildozer android debug
