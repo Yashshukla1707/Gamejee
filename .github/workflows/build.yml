@@ -8,13 +8,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.10
+          python-version: '3.10'
 
       - name: Install dependencies
         run: |
@@ -23,19 +23,28 @@ jobs:
           pip install --upgrade pip
           pip install buildozer cython
 
-      - name: Fix Android SDK licenses (IMPORTANT)
+      # THIS IS THE IMPORTANT FIX (NO LICENSE STUCK ANYMORE)
+      - name: Pre-accept Android SDK licenses
         run: |
           mkdir -p $HOME/.android
           touch $HOME/.android/repositories.cfg
           yes | sdkmanager --licenses || true
 
-      - name: Install Buildozer Android requirements
+      #  extra safety (prevents prompt freeze)
+      - name: Force yes for buildozer
         run: |
-          buildozer android clean || true
-          buildozer android debug --verbose
+          export BUILDOZER_ALWAYS_YES=1
+
+      - name: Build APK
+        run: |
+          yes | buildozer -v android debug
+
+      - name: Show output
+        run: |
+          ls -R bin || true
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: apk
+          name: Gamejee-APK
           path: bin/*.apk
