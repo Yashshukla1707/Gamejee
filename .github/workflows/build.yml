@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    # ---------------- JAVA FIX ----------------
+    # ---------------- JAVA ----------------
     - name: Set up Java 17
       uses: actions/setup-java@v4
       with:
@@ -35,8 +35,8 @@ jobs:
         pip install --upgrade pip
         pip install buildozer cython
 
-    # ---------------- ANDROID SDK (STABLE VERSION) ----------------
-    - name: Setup Android SDK (FIXED)
+    # ---------------- ANDROID SDK (FORCED FIX) ----------------
+    - name: Setup Android SDK (NO PROMPT MODE)
       run: |
         export ANDROID_HOME=$HOME/android-sdk
         mkdir -p $ANDROID_HOME/cmdline-tools
@@ -48,14 +48,17 @@ jobs:
 
         export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
 
-        # FORCE license acceptance (no prompts EVER)
+        # 🔥 FORCE LICENSE ACCEPTANCE (no interaction possible)
         yes | sdkmanager --sdk_root=$ANDROID_HOME --licenses || true
 
-        # IMPORTANT: use STABLE build-tools (NOT 37)
+        # 🔥 INSTALL ONLY STABLE COMPONENTS (NO 37)
         sdkmanager --sdk_root=$ANDROID_HOME \
           "platform-tools" \
           "platforms;android-34" \
           "build-tools;34.0.0"
+
+        # 🔥 VERIFY AIDL EXISTS (CRITICAL FIX)
+        sdkmanager --sdk_root=$ANDROID_HOME "cmdline-tools;latest" || true
 
     # ---------------- BUILD ----------------
     - name: Build APK
