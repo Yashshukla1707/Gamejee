@@ -19,6 +19,3 @@ fullscreen = 0
 android.api = 33
 android.minapi = 21
 android.arch = arm64-v8a
-
-# IMPORTANT: prevents broken SDK auto-pull issues
-p4a.branch = master
