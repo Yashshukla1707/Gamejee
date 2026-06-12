@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Checkout
+      - name: Checkout repo
         uses: actions/checkout@v3
 
       - name: Setup Python
@@ -16,39 +16,28 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Install system deps
+      - name: Install dependencies
         run: |
           sudo apt update
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip
 
-      - name: Install Buildozer
+      - name: Install Buildozer (stable pinned)
         run: |
           pip install --upgrade pip
-          pip install cython==0.29.36 buildozer==1.5.0
+          pip install buildozer==1.5.0 cython==0.29.36 python-for-android==2023.9.16
 
-      - name: Fix Android SDK licenses + tools
+      - name: Force clean environment (IMPORTANT)
         run: |
-          mkdir -p $HOME/android-sdk
-          export ANDROID_SDK_ROOT=$HOME/android-sdk
+          rm -rf ~/.buildozer
+          rm -rf .buildozer
 
-          wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
-          unzip -q commandlinetools-linux-9477386_latest.zip
-          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
-          mv cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest
-
-          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT --licenses
-
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT \
-            "platform-tools" \
-            "platforms;android-33" \
-            "build-tools;33.0.2"
-
-      - name: Force Buildozer env
+      - name: Disable broken SDK auto-download (CRITICAL FIX)
         run: |
-          export ANDROID_SDK_ROOT=$HOME/android-sdk
-          export ANDROID_HOME=$ANDROID_SDK_ROOT
-          export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
+          echo "export P4A_NO_COMPILE=True" >> $GITHUB_ENV
+          echo "export P4A_DIST_FORCE_BUILD=1" >> $GITHUB_ENV
+          echo "export ANDROIDSDK=ignore" >> $GITHUB_ENV
+          echo "export ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
 
-      - name: Build APK
+      - name: Build APK (NO SDKMANAGER USED)
         run: |
-          buildozer -v android debug
+          buildozer android debug
