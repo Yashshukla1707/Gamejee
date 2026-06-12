@@ -16,25 +16,28 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Install system dependencies
+      - name: Install system packages
         run: |
           sudo apt update
           sudo apt install -y \
             git zip unzip openjdk-17-jdk \
-            build-essential
+            build-essential \
+            wget
 
       - name: Install Buildozer
         run: |
           python -m pip install --upgrade pip
-          pip install buildozer cython
+          pip install cython buildozer
 
-      - name: Fix permissions
-        run: chmod +x main.py || true
+      # 🔥 FORCE CLEAN ENV (THIS FIXES BROKEN SDK CACHE)
+      - name: Clean old buildozer cache
+        run: |
+          rm -rf ~/.buildozer || true
 
-      #  THIS FIXES YOUR "ACCEPT? (y/N)" ERROR
-      - name: Build APK (force yes)
+      - name: Build APK (NO PROMPT FIX)
         run: |
           export P4A__ANDROID_ACCEPT_SDK_LICENSE=True
+          export ANDROIDSDK_ACCEPT_LICENSES=1
           yes | buildozer -v android debug
 
       - name: Upload APK
