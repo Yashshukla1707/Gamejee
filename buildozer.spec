@@ -21,7 +21,7 @@ android.archs = arm64-v8a
 android.permissions = INTERNET
 android.enable_androidx = True
 
-# IMPORTANT: keep icon OFF until first successful build
+# keep icon OFF for first successful build
 # icon.filename = Path_Icon.png
 
 [buildozer]
