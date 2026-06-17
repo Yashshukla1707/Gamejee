@@ -19,9 +19,9 @@ android.permissions = INTERNET
 android.api = 34
 android.minapi = 21
 
-android.archs = arm64-v8a
+android.arch = arm64-v8a
 
 log_level = 2
 
-# IMPORTANT: REMOVE icon if it causes crash
+# REMOVE icon line if it causes crash
 # android.icon.filename =
