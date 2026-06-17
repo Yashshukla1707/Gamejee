@@ -33,7 +33,25 @@ jobs:
           rm -rf .buildozer
           rm -rf ~/.buildozer
 
-      - name: Init buildozer (if needed)
+      # ✅ IMPORTANT FIX: Install Android SDK components
+      - name: Install Android SDK tools
+        run: |
+          yes | sudo /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
+            "platform-tools" \
+            "platforms;android-34" \
+            "build-tools;34.0.0"
+
+      # ✅ IMPORTANT FIX: Accept ALL licenses
+      - name: Accept Android SDK licenses
+        run: |
+          yes | sudo /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
+      # ✅ Safety: ensure AIDL exists (fixes your crash)
+      - name: Ensure AIDL dependency
+        run: |
+          sudo apt install -y google-android-build-tools-installer || true
+
+      - name: Init buildozer if needed
         run: |
           if [ ! -f buildozer.spec ]; then buildozer init; fi
 
