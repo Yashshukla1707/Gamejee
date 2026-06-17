@@ -21,7 +21,7 @@ android.archs = arm64-v8a
 android.permissions = INTERNET
 android.enable_androidx = True
 
-# IMPORTANT: DO NOT use icon for now (we fixed your crash)
+# Keep icon OFF for stability first successful build
 # icon.filename = Path_Icon.png
 
 [buildozer]
