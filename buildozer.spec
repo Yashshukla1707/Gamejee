@@ -3,7 +3,7 @@ title = Path
 package.name = mygame
 package.domain = org.example
 
-icon.filename = Images/Path_Icon.jpg
+icon.filename = Images/Path_Icon.png
 
 source.dir = .
 source.include_exts = py,png,jpg,jpeg,kv
