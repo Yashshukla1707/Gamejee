@@ -13,12 +13,12 @@ requirements = python3,kivy
 orientation = portrait
 fullscreen = 1
 
-# 🔥 ANDROID CONFIG (LOCKED STABLE VERSION)
 android.api = 34
 android.minapi = 21
 
-# 🚨 CRITICAL FIX: stops Build-Tools 37 forever
-android.build_tools_version = 34.0.0
+# IMPORTANT: DO NOT force build-tools (let p4a handle it safely)
+# REMOVE THIS LINE COMPLETELY:
+# android.build_tools_version = 34.0.0
 
 android.ndk = 25b
 android.archs = arm64-v8a
@@ -26,12 +26,8 @@ android.archs = arm64-v8a
 android.permissions = INTERNET
 android.enable_androidx = True
 
-# 🔥 prevents broken builds
 p4a.branch = master
-
-# icon disabled until success
-# icon.filename = Path_Icon.png
 
 [buildozer]
 log_level = 2
-warn_on_root = 0
+warn_on_root = 0warn_on_root = 0
