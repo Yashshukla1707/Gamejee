@@ -3,7 +3,6 @@ title = Path
 package.name = mygame
 package.domain = org.example
 
-
 source.dir = .
 source.include_exts = py,png,jpg,jpeg,kv
 
@@ -17,11 +16,13 @@ fullscreen = 1
 android.api = 34
 android.minapi = 21
 android.ndk = 25b
-android.enable_androidx = True
 android.archs = arm64-v8a
 
 android.permissions = INTERNET
-android.accept_sdk_license = True
+android.enable_androidx = True
+
+# IMPORTANT: DO NOT use icon for now (we fixed your crash)
+# icon.filename = Path_Icon.png
 
 [buildozer]
 log_level = 2
