@@ -16,7 +16,7 @@ fullscreen = 1
 android.api = 34
 android.minapi = 21
 
-# 🔥 IMPORTANT: stop Build-Tools 37 issue
+# 🔥 FORCE STABLE BUILD TOOLS
 android.build_tools_version = 34.0.0
 
 android.ndk = 25b
@@ -25,7 +25,7 @@ android.archs = arm64-v8a
 android.permissions = INTERNET
 android.enable_androidx = True
 
-# keep OFF for first successful build
+# KEEP ICON OFF UNTIL FIRST SUCCESS
 # icon.filename = Path_Icon.png
 
 [buildozer]
