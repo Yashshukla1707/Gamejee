@@ -1,4 +1,4 @@
-name: Build Kivy APK (Debug Fixed)
+name: Build Kivy APK
 
 on:
   workflow_dispatch:
@@ -28,69 +28,20 @@ jobs:
           python -m pip install --upgrade pip
           pip install buildozer cython
 
-      - name: Clean old builds
+      # 🔥 IMPORTANT: wipe ALL old broken SDK builds
+      - name: Clean Buildozer cache
         run: |
           rm -rf .buildozer
           rm -rf ~/.buildozer
 
-      # 🔥 Set Android SDK path
-      - name: Set Android environment
+      # 🔥 FORCE SDK PATH
+      - name: Set Android SDK environment
         run: |
           echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> $GITHUB_ENV
           echo "PATH=$PATH:/usr/local/lib/android/sdk/cmdline-tools/latest/bin" >> $GITHUB_ENV
 
-      # 🔥 Accept licenses
-      - name: Accept Android SDK licenses
-        run: |
-          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
-          --sdk_root=/usr/local/lib/android/sdk --licenses || true
-
-      # 🔥 Install stable build tools (NO 37)
+      # 🔥 FORCE INSTALL ONLY STABLE BUILD TOOLS (NO 37 EVER)
       - name: Install Android SDK components
         run: |
-          /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
-            --sdk_root=/usr/local/lib/android/sdk \
-            "platform-tools" \
-            "platforms;android-34" \
-            "build-tools;34.0.0"
-
-      # 🔥 AIDL fallback
-      - name: Install AIDL dependency
-        run: |
-          sudo apt install -y google-android-build-tools-installer || true
-
-      - name: Init Buildozer
-        run: |
-          if [ ! -f buildozer.spec ]; then buildozer init; fi
-
-      # 🔥 BUILD STEP
-      - name: Build APK
-        run: |
-          buildozer -v android debug
-
-      # 🔥 DEBUG STEP (THIS IS THE IMPORTANT ONE)
-      - name: DEBUG - Find APK files
-        run: |
-          echo "Searching for APK files..."
-          find . -type f -name "*.apk" -print
-          echo "Checking buildozer folders..."
-          ls -R .buildozer || true
-          ls -R bin || true
-
-      # 🔥 VERIFY APK EXISTS (FAIL IF NOT FOUND)
-      - name: Validate APK
-        run: |
-          APK=$(find . -name "*.apk" | head -n 1)
-          if [ -z "$APK" ]; then
-            echo "❌ APK NOT GENERATED"
-            exit 1
-          else
-            echo "✅ APK FOUND: $APK"
-          fi
-
-      # 🔥 UPLOAD APK (SAFE PATH)
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: apk
-          path: "**/*.apk"
+          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
+            --
