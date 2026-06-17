@@ -28,20 +28,56 @@ jobs:
           python -m pip install --upgrade pip
           pip install buildozer cython
 
-      # 🔥 IMPORTANT: wipe ALL old broken SDK builds
-      - name: Clean Buildozer cache
+      - name: Clean old builds
         run: |
           rm -rf .buildozer
           rm -rf ~/.buildozer
 
-      # 🔥 FORCE SDK PATH
-      - name: Set Android SDK environment
+      # 🔥 SET ANDROID SDK PATH
+      - name: Set Android environment
         run: |
           echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> $GITHUB_ENV
           echo "PATH=$PATH:/usr/local/lib/android/sdk/cmdline-tools/latest/bin" >> $GITHUB_ENV
 
-      # 🔥 FORCE INSTALL ONLY STABLE BUILD TOOLS (NO 37 EVER)
+      # 🔥 FIX 1: ACCEPT LICENSES (NO BREAKING LINES)
+      - name: Accept Android SDK licenses
+        run: |
+          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=/usr/local/lib/android/sdk --licenses || true
+
+      # 🔥 FIX 2: INSTALL STABLE BUILD TOOLS (NO 37)
       - name: Install Android SDK components
         run: |
-          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
-            --
+          /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=/usr/local/lib/android/sdk "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+
+      # 🔥 FIX 3: AIDL fallback
+      - name: Install AIDL dependency
+        run: |
+          sudo apt install -y google-android-build-tools-installer || true
+
+      - name: Init Buildozer
+        run: |
+          if [ ! -f buildozer.spec ]; then buildozer init; fi
+
+      # 🔥 BUILD STEP
+      - name: Build APK
+        run: |
+          buildozer -v android debug
+
+      # 🔥 DEBUG STEP (SEE WHAT WAS GENERATED)
+      - name: Debug APK location
+        run: |
+          echo "Searching APK files..."
+          find . -name "*.apk" -print
+
+      # 🔥 FAIL IF APK NOT FOUND (NO FAKE SUCCESS)
+      - name: Verify APK
+        run: |
+          APK=$(find . -name "*.apk" | head -n 1)
+          if [ -z "$APK" ]; then
+            echo "❌ APK NOT GENERATED"
+            exit 1
+          else
+            echo "✅ APK FOUND: $APK"
+          fi
+
+      # 🔥
