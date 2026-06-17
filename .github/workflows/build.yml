@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Python
@@ -25,42 +25,28 @@ jobs:
 
       - name: Install Python tools
         run: |
-          pip install --upgrade pip
+          python -m pip install --upgrade pip
           pip install buildozer cython
 
-      - name: Clean old builds
+      - name: Clean previous builds
         run: |
           rm -rf .buildozer
           rm -rf ~/.buildozer
 
-      # ✅ IMPORTANT FIX: Install Android SDK components
-      - name: Install Android SDK tools
+      # ✅ FIX 1: Install correct Android components
+      - name: Install Android SDK components
         run: |
-          yes | sudo /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
-            "platform-tools" \
-            "platforms;android-34" \
-            "build-tools;34.0.0"
+          /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
+          --sdk_root=/usr/local/lib/android/sdk \
+          "platform-tools" \
+          "platforms;android-34" \
+          "build-tools;34.0.0"
 
-      # ✅ IMPORTANT FIX: Accept ALL licenses
+      # ✅ FIX 2: Accept licenses (REAL SDK PATH)
       - name: Accept Android SDK licenses
         run: |
-          yes | sudo /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
+          --sdk_root=/usr/local/lib/android/sdk --licenses || true
 
-      # ✅ Safety: ensure AIDL exists (fixes your crash)
-      - name: Ensure AIDL dependency
-        run: |
-          sudo apt install -y google-android-build-tools-installer || true
-
-      - name: Init buildozer if needed
-        run: |
-          if [ ! -f buildozer.spec ]; then buildozer init; fi
-
-      - name: Build APK
-        run: |
-          buildozer -v android debug
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: apk
-          path: bin/*.apk
+      # ✅ FIX 3: Ensure AIDL dependency
+      - name: Fix AIDL dependency
