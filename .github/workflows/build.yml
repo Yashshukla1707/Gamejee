@@ -8,8 +8,7 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -20,30 +19,29 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y \
-          zip unzip openjdk-17-jdk \
-          autoconf automake libtool pkg-config \
-          zlib1g-dev
+            git zip unzip openjdk-17-jdk \
+            autoconf automake libtool pkg-config \
+            zlib1g-dev
 
       - name: Install Buildozer
         run: |
           pip install --upgrade pip
-          pip install cython==0.29.33
-          pip install buildozer==1.5.0
-          pip install python-for-android==2024.01.21
+          pip install buildozer cython==0.29.33
 
       - name: Build APK
         run: |
           buildozer android debug > build.log 2>&1
 
-      - name: Show Log If Failed
-        if: failure()
+      - name: Show Build Log
+        if: always()
         run: |
           tail -n 500 build.log
 
       - name: Upload APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: APK
+          name: apk
           path: |
             bin/*.apk
-            ./**/*.apk
+            .buildozer/**/*.apk
