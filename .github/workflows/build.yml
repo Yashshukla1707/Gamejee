@@ -14,31 +14,32 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"   # ✅ FIXED HERE
+          python-version: "3.10"
 
-      - name: Install dependencies
+      - name: Install system dependencies
         run: |
           sudo apt update
           sudo apt install -y git zip unzip openjdk-11-jdk
+
           python -m pip install --upgrade pip
           pip install buildozer cython
 
-      - name: Accept Android licenses
+      - name: Setup Android SDK (FIX ALL LICENSE ISSUES)
         run: |
+          export ANDROID_SDK_ROOT=$ANDROID_HOME
+
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
-      - name: Install Android SDK components
-        run: |
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
-          "platform-tools" \
-          "platforms;android-34" \
-          "build-tools;34.0.0"
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install \
+            "platform-tools" \
+            "platforms;android-34" \
+            "build-tools;34.0.0"
 
       - name: Build APK
         run: |
           buildozer -v android debug
 
-      - name: Upload APK
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: Path-APK
