@@ -32,36 +32,24 @@ jobs:
           rm -rf .buildozer
           rm -rf ~/.buildozer
 
-      # 🔥 FIX 1: Install Android SDK tools properly
-      - name: Install Android SDK components
+      # 🔥 FIX 1: Set SDK environment
+      - name: Set Android SDK path
         run: |
-          /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
-          --sdk_root=/usr/local/lib/android/sdk \
-          "platform-tools" \
-          "platforms;android-34" \
-          "build-tools;34.0.0"
+          echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> $GITHUB_ENV
+          echo "PATH=$PATH:/usr/local/lib/android/sdk/cmdline-tools/latest/bin" >> $GITHUB_ENV
 
-      # 🔥 FIX 2: Accept licenses (THIS WAS YOUR ERROR)
-      - name: Accept Android SDK licenses
+      # 🔥 FIX 2: Accept ALL licenses properly
+      - name: Accept Android licenses
         run: |
-          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
-          --sdk_root=/usr/local/lib/android/sdk --licenses || true
+          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
-      # 🔥 FIX 3: AIDL fix
-      - name: Fix AIDL dependency
+      # 🔥 FIX 3: FORCE STABLE BUILD-TOOLS (IMPORTANT)
+      - name: Install stable Android build-tools
         run: |
-          sudo apt install -y google-android-build-tools-installer || true
+          sdkmanager \
+            "platform-tools" \
+            "platforms;android-34" \
+            "build-tools;34.0.0"
 
-      - name: Init buildozer if missing
-        run: |
-          if [ ! -f buildozer.spec ]; then buildozer init; fi
-
-      - name: Build APK
-        run: |
-          buildozer -v android debug
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: apk
-          path: bin/*.apk
+      # 🔥 FIX 4: Ensure AIDL dependency
+      - name: Install
