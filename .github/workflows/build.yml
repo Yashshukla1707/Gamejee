@@ -33,14 +33,16 @@ jobs:
           rm -rf .buildozer
           rm -rf ~/.buildozer
 
-      # 🔥 FIX 1: Correct SDK path
+      # 🔥 FIX SDK PATH
       - name: Set Android SDK environment
         run: |
           echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> $GITHUB_ENV
           echo "PATH=$PATH:/usr/local/lib/android/sdk/cmdline-tools/latest/bin" >> $GITHUB_ENV
 
-      # 🔥 FIX 2: Accept ALL licenses (IMPORTANT)
+      # 🔥 ACCEPT LICENSES (fix your error)
       - name: Accept Android SDK licenses
         run: |
           yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
-          --sdk_root=/usr/local
+          --sdk_root=/usr/local/lib/android/sdk --licenses || true
+
+      # 🔥 FORCE
