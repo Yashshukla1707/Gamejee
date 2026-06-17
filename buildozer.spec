@@ -16,7 +16,7 @@ fullscreen = 1
 android.api = 34
 android.minapi = 21
 
-# 🔥 FORCE STABLE BUILD TOOLS
+# 🔥 THIS IS THE KEY FIX (BLOCKS BUILD-TOOLS 37)
 android.build_tools_version = 34.0.0
 
 android.ndk = 25b
@@ -25,9 +25,12 @@ android.archs = arm64-v8a
 android.permissions = INTERNET
 android.enable_androidx = True
 
-# KEEP ICON OFF UNTIL FIRST SUCCESS
+# keep icon OFF until first success
 # icon.filename = Path_Icon.png
 
 [buildozer]
 log_level = 2
 warn_on_root = 0
+
+# 🔥 extra safety (prevents wrong python-for-android builds)
+p4a.branch = master
