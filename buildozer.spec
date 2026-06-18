@@ -18,6 +18,7 @@ android.permissions = INTERNET
 
 android.api = 34
 android.minapi = 21
+android.ndk = 25.2.9519653
 
 android.archs = arm64-v8a
 
