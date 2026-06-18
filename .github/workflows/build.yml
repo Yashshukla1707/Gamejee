@@ -20,39 +20,31 @@ jobs:
           python-version: "3.10"
 
 
-      - name: Install dependencies
+      - name: Install
         run: |
           sudo apt update
-          sudo apt install -y git zip unzip openjdk-11-jdk
+          sudo apt install -y git zip unzip openjdk-17-jdk
 
           pip install --upgrade pip
           pip install buildozer cython==0.29.36
 
 
-      - name: Prepare Android SDK for Buildozer
+      - name: Android SDK setup
         run: |
 
-          mkdir -p /home/runner/.buildozer/android/platform/android-sdk
+          yes | sdkmanager --licenses || true
 
-
-          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
-          --sdk_root=/home/runner/.buildozer/android/platform/android-sdk \
-          --licenses || true
-
-
-          /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
-          --sdk_root=/home/runner/.buildozer/android/platform/android-sdk \
+          sdkmanager \
           "platform-tools" \
           "platforms;android-34" \
-          "build-tools;34.0.0"
+          "build-tools;34.0.0" \
+          "ndk;25.2.9519653"
 
 
-          mkdir -p /home/runner/.buildozer/android/platform/android-sdk/tools/bin
+      - name: Set environment
+        run: |
 
-
-          ln -s \
-          /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
-          /home/runner/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
+          echo "ANDROIDNDK=$ANDROID_HOME/ndk/25.2.9519653" >> $GITHUB_ENV
 
 
       - name: Build APK
