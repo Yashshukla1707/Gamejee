@@ -26,7 +26,7 @@ jobs:
 
 
 
-    - name: Install dependencies
+    - name: Install packages
       run: |
 
         sudo apt update
@@ -34,6 +34,7 @@ jobs:
         sudo apt install -y \
         python3-pip \
         openjdk-17-jdk \
+        git \
         zip \
         unzip \
         autoconf \
@@ -57,15 +58,28 @@ jobs:
 
 
 
-    - name: Accept Android licenses
+    - name: Setup Android SDK
       run: |
 
-        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+        yes | sdkmanager --licenses || true
 
-        $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
+        sdkmanager \
         "platform-tools" \
         "platforms;android-34" \
         "build-tools;34.0.0"
+
+
+
+    - name: Configure Buildozer
+      run: |
+
+        mkdir -p ~/.buildozer/android/platform
+
+        echo "android.api = 34" >> buildozer.spec
+
+        echo "android.minapi = 21" >> buildozer.spec
+
+        echo "android.build_tools_version = 34.0.0" >> buildozer.spec
 
 
 
