@@ -5,11 +5,8 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
 
-    env:
-      ANDROID_SDK_ROOT: /home/runner/.buildozer/android/platform/android-sdk
-      ANDROID_HOME: /home/runner/.buildozer/android/platform/android-sdk
+    runs-on: ubuntu-22.04
 
     steps:
 
@@ -32,29 +29,30 @@ jobs:
           pip install buildozer cython==0.29.36
 
 
-      - name: Prepare Android SDK
+      - name: Prepare Android SDK for Buildozer
         run: |
 
-          mkdir -p $ANDROID_SDK_ROOT
+          mkdir -p /home/runner/.buildozer/android/platform/android-sdk
+
 
           yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
-          --sdk_root=$ANDROID_SDK_ROOT \
+          --sdk_root=/home/runner/.buildozer/android/platform/android-sdk \
           --licenses || true
 
 
           /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
-          --sdk_root=$ANDROID_SDK_ROOT \
+          --sdk_root=/home/runner/.buildozer/android/platform/android-sdk \
           "platform-tools" \
           "platforms;android-34" \
           "build-tools;34.0.0"
 
 
-      - name: Force Buildozer config
-        run: |
+          mkdir -p /home/runner/.buildozer/android/platform/android-sdk/tools/bin
 
-          mkdir -p ~/.buildozer/android/platform
 
-          echo "sdk.dir=$ANDROID_SDK_ROOT" > ~/.buildozer/android/platform/android-sdk/.config
+          ln -s \
+          /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
+          /home/runner/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
 
 
       - name: Build APK
