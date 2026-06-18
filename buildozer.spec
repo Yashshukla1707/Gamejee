@@ -6,6 +6,8 @@ package.name = path
 
 package.domain = org.example
 
+version = 1.0
+
 source.dir = .
 
 source.include_exts = py,png,jpg,jpeg,kv
