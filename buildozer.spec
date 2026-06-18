@@ -1,28 +1,35 @@
 [app]
+
 title = Path
+
 package.name = path
+
 package.domain = org.example
 
 source.dir = .
-source.include_exts = py,png,jpg,kv,atlas
 
-version = 1.0
+source.include_exts = py,png,jpg,jpeg,kv
 
 requirements = python3,kivy
 
 orientation = portrait
 
-fullscreen = 1
+fullscreen = 0
 
-android.permissions = INTERNET
 
 android.api = 34
+
 android.minapi = 21
-android.ndk = 25.2.9519653
 
 android.archs = arm64-v8a
 
-log_level = 2
+android.permissions = INTERNET
 
-# REMOVE icon line if it causes crash
-# android.icon.filename =
+
+icon.filename = Images/Path_Icon.png
+
+
+
+[buildozer]
+
+log_level = 2
