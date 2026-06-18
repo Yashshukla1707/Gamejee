@@ -10,51 +10,77 @@ jobs:
 
     steps:
 
-      - name: Checkout
-        uses: actions/checkout@v4
+    - name: Checkout
+      uses: actions/checkout@v4
 
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.10"
 
 
-      - name: Install
-        run: |
-          sudo apt update
-          sudo apt install -y git zip unzip openjdk-17-jdk
+    - name: Install dependencies
+      run: |
 
-          pip install --upgrade pip
-          pip install buildozer cython==0.29.36
+        sudo apt update
 
-
-      - name: Android SDK setup
-        run: |
-
-          yes | sdkmanager --licenses || true
-
-          sdkmanager \
-          "platform-tools" \
-          "platforms;android-34" \
-          "build-tools;34.0.0" \
-          "ndk;25.2.9519653"
-
-
-      - name: Set environment
-        run: |
-
-          echo "ANDROIDNDK=$ANDROID_HOME/ndk/25.2.9519653" >> $GITHUB_ENV
+        sudo apt install -y \
+          git \
+          zip \
+          unzip \
+          openjdk-17-jdk \
+          python3-pip \
+          autoconf \
+          libtool \
+          pkg-config \
+          zlib1g-dev \
+          libncurses5-dev \
+          libffi-dev \
+          libssl-dev
 
 
-      - name: Build APK
-        run: |
+    - name: Install Buildozer
+      run: |
 
-          buildozer -v android debug
+        python -m pip install --upgrade pip
+
+        pip install buildozer
+
+        pip install cython==0.29.36
 
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: Path-APK
-          path: bin/*.apk
+
+    - name: Setup Android SDK
+      run: |
+
+        export ANDROID_HOME=$HOME/android-sdk
+
+        mkdir -p $ANDROID_HOME
+
+        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
+        $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
+        "platform-tools" \
+        "platforms;android-34" \
+        "build-tools;34.0.0"
+
+
+
+    - name: Build APK
+      run: |
+
+        buildozer android clean || true
+
+        buildozer -v android debug
+
+
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+
+      with:
+
+        name: Path-APK
+
+        path: bin/*.apk
