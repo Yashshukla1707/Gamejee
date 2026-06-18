@@ -26,7 +26,7 @@ jobs:
 
 
 
-    - name: Install packages
+    - name: Install dependencies
       run: |
 
         sudo apt update
@@ -58,28 +58,17 @@ jobs:
 
 
 
-    - name: Setup Android SDK
+    - name: Install Android packages
       run: |
 
-        yes | sdkmanager --licenses || true
+        SDKMANAGER=$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager
 
-        sdkmanager \
+        yes | $SDKMANAGER --licenses || true
+
+        $SDKMANAGER \
         "platform-tools" \
         "platforms;android-34" \
         "build-tools;34.0.0"
-
-
-
-    - name: Configure Buildozer
-      run: |
-
-        mkdir -p ~/.buildozer/android/platform
-
-        echo "android.api = 34" >> buildozer.spec
-
-        echo "android.minapi = 21" >> buildozer.spec
-
-        echo "android.build_tools_version = 34.0.0" >> buildozer.spec
 
 
 
