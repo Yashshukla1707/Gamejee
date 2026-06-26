@@ -1,9 +1,16 @@
+import os
 import sys
 import traceback
-import os
+
+os.environ['KIVY_NO_ARGS'] = '1'
+
+from kivy.logger import Logger
+
+Logger.info("APP STARTED")
+
 
 def exception_handler(exc_type, exc_value, exc_traceback):
-    with open("crash_log.txt","w") as f:
+    with open("crash_log.txt", "w") as f:
         traceback.print_exception(
             exc_type,
             exc_value,
@@ -12,6 +19,9 @@ def exception_handler(exc_type, exc_value, exc_traceback):
         )
 
 sys.excepthook = exception_handler
+
+
+# Now your normal imports start
 
 
 
