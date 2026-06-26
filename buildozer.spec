@@ -1,28 +1,56 @@
 [app]
 
 title = Path
-package.name = path
-package.domain = org.path.game
+
+
+package.name = pathgame
+
+package.domain = org.shivansh
+
 
 source.dir = .
-source.include_exts = py,png,jpg,jpeg,kv
 
-version = 1.0
+
+source.include_exts = py,png,jpg,jpeg,gif,wav,mp3,ttf,json
+
+
+version = 1.1
+
 
 requirements = python3,kivy
 
-orientation = portrait
 
-android.api = 34
-android.minapi = 21
-android.ndk = 25b
+orientation = landscape
 
-android.archs = arm64-v8a
-
-android.accept_sdk_license = True
-
-android.permissions = INTERNET
 
 fullscreen = 0
 
-icon.filename = Images/Path_Icon.png
+
+android.api = 33
+
+android.minapi = 21
+
+android.ndk = 25b
+
+
+android.archs = arm64-v8a,armeabi-v7a
+
+
+android.accept_sdk_license = True
+
+
+android.enable_androidx = True
+
+
+android.permissions = INTERNET
+
+
+icon.filename = %(source.dir)s/assets/icon.png
+
+
+
+[buildozer]
+
+log_level = 2
+
+warn_on_root = 1
