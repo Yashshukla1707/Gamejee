@@ -29,6 +29,7 @@ fullscreen = 0
 
 
 icon.filename = Images/Path_Icon.jpg
+android.splash_color = #000000
 
 
 android.api = 34
