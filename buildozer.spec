@@ -7,6 +7,15 @@ package.name = mygame
 package.domain = org.example
 
 
+
+# Your existing settings stay here
+
+# Android crash fixes
+android.disable_multitouch = 1
+android.private_storage = True
+android.add_src = .
+
+
 source.dir = .
 
 source.include_exts = py,png,jpg,jpeg,kv,gif,wav,mp3,ttf,json,atlas
