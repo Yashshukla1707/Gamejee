@@ -1,9 +1,11 @@
-name: Build APK
+name: Build Path APK
 
 on:
   workflow_dispatch:
 
+
 jobs:
+
   build:
 
     runs-on: ubuntu-22.04
@@ -11,60 +13,85 @@ jobs:
 
     steps:
 
-    - name: Checkout
+
+    - name: Checkout repository
       uses: actions/checkout@v4
 
 
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.10"
 
-
-    - name: Install dependencies
+    - name: Install Java and Android tools
       run: |
 
         sudo apt update
 
         sudo apt install -y \
-        git \
-        zip \
-        unzip \
         openjdk-17-jdk \
+        unzip \
+        zip \
+        git \
         python3-pip \
         autoconf \
         libtool \
         pkg-config \
-        zlib1g-dev
-
-
-        pip install --upgrade pip
-
-        pip install buildozer cython==0.29.36
+        zlib1g-dev \
+        libncurses5-dev \
+        libncursesw5-dev \
+        cmake
 
 
 
-    - name: Accept Android licenses
+    - name: Install Android SDK
+
+      uses: android-actions/setup-android@v3
+
+
+
+    - name: Accept all Android licenses
+
       run: |
 
-        mkdir -p $HOME/.buildozer/android/platform
+        yes | sdkmanager --licenses
 
-        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
+
+    - name: Install SDK packages
+
+      run: |
+
+        sdkmanager \
+        "platform-tools" \
+        "platforms;android-33" \
+        "build-tools;33.0.2" \
+        "cmdline-tools;latest"
+
+
+
+    - name: Install Python packages
+
+      run: |
+
+        python3 -m pip install --upgrade pip
+
+        pip3 install buildozer
+
+        pip3 install cython==0.29.36
 
 
 
     - name: Build APK
+
       run: |
 
-        buildozer android debug
+        buildozer android release
 
 
 
     - name: Upload APK
+
       uses: actions/upload-artifact@v4
 
       with:
 
-        name: Path-APK
+        name: Path-update-APK
 
         path: bin/*.apk
