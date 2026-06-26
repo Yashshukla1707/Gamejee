@@ -1,12 +1,13 @@
+Buildozer.spec
+
 [app]
 
-title = MyGame
+title = Path
 
-package.name = mygame
+package.name = pathgame
 
-package.domain = org.example
-
-
+package.domain = org.shivansh
+[app]
 
 # Your existing settings stay here
 
@@ -18,7 +19,8 @@ android.add_src = .
 
 source.dir = .
 
-source.include_exts = py,png,jpg,jpeg,kv,gif,wav,mp3,ttf,json,atlas
+
+source.include_exts = py,png,jpg,jpeg,gif,wav,mp3,ttf,json
 
 
 version = 1.1
@@ -27,27 +29,33 @@ version = 1.1
 requirements = python3,kivy
 
 
-# Force whole app to landscape
 orientation = landscape
 
-fullscreen = 1
+
+fullscreen = 0
 
 
-android.api = 34
+android.api = 33
 
 android.minapi = 21
 
 android.ndk = 25b
 
 
-android.arch = arm64-v8a
+android.archs = arm64-v8a,armeabi-v7a
 
 
 android.accept_sdk_license = True
 
 
+android.enable_androidx = True
+
+
+android.permissions = INTERNET
+
+
 [buildozer]
 
-log_level = 1
+log_level = 2
 
-warn_on_root = 0
+warn_on_root = 1
