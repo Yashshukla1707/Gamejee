@@ -7,7 +7,6 @@ title = Path
 package.name = pathgame
 
 package.domain = org.shivansh
-[app]
 
 # Your existing settings stay here
 
