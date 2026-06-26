@@ -1,8 +1,9 @@
 import sys
 import traceback
+import os
 
 def exception_handler(exc_type, exc_value, exc_traceback):
-    with open("crash_log.txt", "w") as f:
+    with open("crash_log.txt","w") as f:
         traceback.print_exception(
             exc_type,
             exc_value,
@@ -11,6 +12,8 @@ def exception_handler(exc_type, exc_value, exc_traceback):
         )
 
 sys.excepthook = exception_handler
+
+
 
 
 
