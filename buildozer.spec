@@ -10,10 +10,17 @@ package.domain = org.shivansh
 source.dir = .
 
 
-source.include_exts = py,png,jpg,jpeg,gif,wav,mp3,ttf,json
+source.include_exts = py,png,jpg,jpeg,gif,wav,mp3,ttf,json,kv,atlas
 
 
-version = 1.1
+source.include_patterns =
+    *.py
+    *.kv
+    Games/*
+    assets/*
+
+
+version = 1.2
 
 
 requirements = python3,kivy
@@ -42,6 +49,10 @@ android.enable_androidx = True
 
 
 android.permissions = INTERNET
+
+
+icon.filename = %(source.dir)s/assets/icon.png
+
 
 
 [buildozer]
