@@ -2,7 +2,6 @@
 
 title = Path
 
-
 package.name = pathgame
 
 package.domain = org.shivansh
@@ -43,10 +42,6 @@ android.enable_androidx = True
 
 
 android.permissions = INTERNET
-
-
-icon.filename = %(source.dir)s/assets/icon.png
-
 
 
 [buildozer]
