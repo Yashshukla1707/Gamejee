@@ -1,17 +1,15 @@
-
 [app]
 
-title = Path
+title = MyGame
 
-package.name = pathgame
+package.name = mygame
 
-package.domain = org.shivansh
+package.domain = org.example
 
 
 source.dir = .
 
-
-source.include_exts = py,png,jpg,jpeg,gif,wav,mp3,ttf,json
+source.include_exts = py,png,jpg,jpeg,kv,gif,wav,mp3,ttf,json,atlas
 
 
 version = 1.1
@@ -20,33 +18,27 @@ version = 1.1
 requirements = python3,kivy
 
 
+# Force whole app to landscape
 orientation = landscape
 
+fullscreen = 1
 
-fullscreen = 0
 
-
-android.api = 33
+android.api = 34
 
 android.minapi = 21
 
 android.ndk = 25b
 
 
-android.archs = arm64-v8a,armeabi-v7a
+android.arch = arm64-v8a
 
 
 android.accept_sdk_license = True
 
 
-android.enable_androidx = True
-
-
-android.permissions = INTERNET
-
-
 [buildozer]
 
-log_level = 2
+log_level = 1
 
-warn_on_root = 1
+warn_on_root = 0
