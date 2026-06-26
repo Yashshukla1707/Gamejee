@@ -1,3 +1,19 @@
+import sys
+import traceback
+
+def exception_handler(exc_type, exc_value, exc_traceback):
+    with open("crash_log.txt", "w") as f:
+        traceback.print_exception(
+            exc_type,
+            exc_value,
+            exc_traceback,
+            file=f
+        )
+
+sys.excepthook = exception_handler
+
+
+
 #Importing Modules----------------------------------------------------------------------------------------------
 
 from kivy.app import App
