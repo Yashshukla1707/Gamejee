@@ -14,33 +14,48 @@ jobs:
     steps:
 
 
-    - name: Checkout
+    - name: Checkout code
       uses: actions/checkout@v4
 
 
-    - name: Setup Java 17
+
+    - name: Install Java 17
       uses: actions/setup-java@v4
+
       with:
+
         distribution: temurin
+
         java-version: 17
 
 
-    - name: Verify Java
+
+    - name: Check Java
+
       run: |
+
         java -version
+
         echo $JAVA_HOME
 
 
+
     - name: Setup Android SDK
+
       uses: android-actions/setup-android@v3
 
 
-    - name: Accept Android licenses
+
+    - name: Accept Android licenses automatically
+
       run: |
+
         yes | sdkmanager --licenses || true
 
 
-    - name: Install Android packages
+
+    - name: Install Android SDK packages
+
       run: |
 
         sdkmanager \
@@ -50,7 +65,27 @@ jobs:
         "cmdline-tools;latest"
 
 
+
+    - name: Install system dependencies
+
+      run: |
+
+        sudo apt update
+
+        sudo apt install -y \
+        git \
+        zip \
+        unzip \
+        autoconf \
+        libtool \
+        pkg-config \
+        zlib1g-dev \
+        cmake
+
+
+
     - name: Install Buildozer
+
       run: |
 
         python3 -m pip install --upgrade pip
@@ -60,17 +95,32 @@ jobs:
         pip3 install cython==0.29.36
 
 
-    - name: Build APK
+
+    - name: Remove old build files
+
       run: |
 
-        buildozer android release
+        rm -rf .buildozer
+
+        rm -rf bin
+
+
+
+    - name: Build APK
+
+      run: |
+
+        buildozer android debug
+
 
 
     - name: Upload APK
+
       uses: actions/upload-artifact@v4
+
 
       with:
 
-        name: Path-update-APK
+        name: Path-APK
 
         path: bin/*.apk
