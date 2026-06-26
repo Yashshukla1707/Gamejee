@@ -1,24 +1,17 @@
-import os
-import sys
-import traceback
+from kivy.config import Config
 
-os.environ['KIVY_NO_ARGS'] = '1'
-
-from kivy.logger import Logger
-
-Logger.info("APP STARTED")
+# Android rendering crash fix
+Config.set('graphics', 'multisamples', '0')
+Config.set('graphics', 'resizable', '1')
 
 
-def exception_handler(exc_type, exc_value, exc_traceback):
-    with open("crash_log.txt", "w") as f:
-        traceback.print_exception(
-            exc_type,
-            exc_value,
-            exc_traceback,
-            file=f
-        )
+# Your other imports below this
+# Example:
+# from kivy.uix.button import Button
+# from kivy.uix.label import Label
+# etc.
 
-sys.excepthook = exception_handler
+
 
 
 # Now your normal imports start
