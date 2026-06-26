@@ -13,6 +13,9 @@ source.dir = .
 source.include_exts = py,png,jpg,jpeg,gif,wav,mp3,ttf,json,kv
 
 
+source.include_patterns = Images/*
+
+
 version = 1.3
 
 
@@ -25,13 +28,14 @@ orientation = landscape
 fullscreen = 0
 
 
+icon.filename = Images/Path_Icon.jpg
+
+
 android.api = 34
 
 android.minapi = 21
 
 android.ndk = 25b
-
-android.build_tools_version = 34.0.0
 
 
 android.archs = arm64-v8a
@@ -47,6 +51,7 @@ android.permissions = INTERNET
 
 
 p4a.bootstrap = sdl2
+
 
 
 [buildozer]
