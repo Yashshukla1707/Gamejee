@@ -1,20 +1,16 @@
 from kivy.config import Config
 
-# Android rendering crash fix
+# Android rendering fixes
 Config.set('graphics', 'multisamples', '0')
 Config.set('graphics', 'resizable', '1')
 
+import os
 
-# Your other imports below this
-# Example:
-# from kivy.uix.button import Button
-# from kivy.uix.label import Label
-# etc.
+os.environ["KIVY_GL_BACKEND"] = "sdl2"
+os.environ["KIVY_WINDOW"] = "sdl2"
 
 
 
-
-# Now your normal imports start
 
 
 
