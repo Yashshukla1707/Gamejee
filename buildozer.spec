@@ -16,7 +16,7 @@ source.include_exts = py,png,jpg,jpeg,gif,wav,mp3,ttf,json,kv
 version = 1.2
 
 
-requirements = python3==3.11.9,kivy
+requirements = python3,kivy
 
 
 orientation = landscape
@@ -33,9 +33,6 @@ android.ndk = 25b
 
 
 android.archs = arm64-v8a
-
-
-android.python_version = 3.11
 
 
 android.accept_sdk_license = True
