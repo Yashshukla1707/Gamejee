@@ -9,7 +9,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
-from .effects import  break_block
+from effects import  break_block
 from kivy.uix.screenmanager import Screen
 from hover_button import HoverButtonRed
 
