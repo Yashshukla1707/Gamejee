@@ -1,3 +1,18 @@
+from kivy.config import Config
+
+Config.set('graphics', 'multisamples', '0')
+Config.set('graphics', 'resizable', '1')
+
+import os
+
+os.environ["KIVY_GL_BACKEND"] = "sdl2"
+os.environ["KIVY_WINDOW"] = "sdl2"
+
+
+
+
+
+
 #Importing Modules----------------------------------------------------------------------------------------------
 
 from kivy.app import App
