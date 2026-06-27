@@ -1,4 +1,4 @@
-neet_bio_questions = [
+neet_chem_questions = [
     {
         ""
     }
