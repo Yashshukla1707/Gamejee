@@ -10,7 +10,7 @@ package.domain = org.shivansh
 source.dir = .
 
 
-source.include_exts = py,png,jpg,jpeg,gif,wav,mp3,ttf,json,kv
+source.include_exts = py,png,jpg,jpeg,gif,wav,mp3,ttf , obj , mtl,json,kv
 
 
 source.include_patterns = Images/*
