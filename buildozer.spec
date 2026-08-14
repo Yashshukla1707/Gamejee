@@ -2,7 +2,7 @@
 
 title = Path
 
-package.name = pathgame
+package.name = pathgame3d
 
 package.domain = org.shivansh
 
@@ -16,7 +16,7 @@ source.include_exts = py,png,jpg,jpeg,gif,wav,mp3,ttf , obj , mtl,json,kv
 source.include_patterns = Images/*
 
 
-version = 1.3
+version = 1.0
 
 
 requirements = python3,kivy
